@@ -117,6 +117,11 @@
 @property (readwrite, nonatomic, assign) IBInspectable BOOL enableCopy;
 
 /**
+ 是否支持选择长按手势，默认NO
+ */
+@property (readwrite, nonatomic, assign) IBInspectable BOOL longPressEnable;
+
+/**
  设置`self.lineBreakMode`时候的自定义字符，默认值为"…"
  只针对`self.lineBreakMode`的以下三种值有效
  NSLineBreakByTruncatingHead,    // Truncate at head of line: "…wxyz"

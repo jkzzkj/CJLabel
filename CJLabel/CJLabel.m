@@ -105,6 +105,7 @@ NSString * const kCJLinkStringIdentifierAttributesName       = @"kCJLinkStringId
     _textNumberOfLines = -1;
     _caculateCopySize = NO;
     _needRedrawn = YES;
+    _longPressEnable = NO;
     _longPress = NO;
     _extendsLinkTouchArea = NO;
     _lastGlyphRunStrokeItem = nil;
@@ -156,6 +157,21 @@ NSString * const kCJLinkStringIdentifierAttributesName       = @"kCJLinkStringId
             self.attributedText = self.attributedText;
         }
         
+    }
+}
+
+- (void)setLongPressEnable:(BOOL)longPressEnable {
+    _longPressEnable = longPressEnable;
+    if (_longPressEnable) {
+        if (_longPressGestureRecognizer) {
+            if ([self.gestureRecognizers containsObject:_longPressGestureRecognizer]) {
+               [self removeGestureRecognizer:_longPressGestureRecognizer];
+            }
+        }
+    } else {
+        if (![self.gestureRecognizers containsObject:self.longPressGestureRecognizer]) {
+           [self removeGestureRecognizer:self.longPressGestureRecognizer];
+        }
     }
 }
 
