@@ -162,7 +162,7 @@ NSString * const kCJLinkStringIdentifierAttributesName       = @"kCJLinkStringId
 
 - (void)setLongPressEnable:(BOOL)longPressEnable {
     _longPressEnable = longPressEnable;
-    if (!_longPressEnable) {
+    if (longPressEnable == NO) {
         if (_longPressGestureRecognizer) {
             if ([self.gestureRecognizers containsObject:_longPressGestureRecognizer]) {
                [self removeGestureRecognizer:_longPressGestureRecognizer];
