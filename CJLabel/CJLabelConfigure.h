@@ -318,7 +318,7 @@ typedef struct CJCTLineVerticalLayout CJCTLineVerticalLayout;
 /**
  显示所有复制
  */
-- (void)selectAll:(nullable id)sender
+- (void)selectAll:(nullable id)sender;
 
 @end
 
