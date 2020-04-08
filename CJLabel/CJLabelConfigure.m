@@ -813,9 +813,8 @@ typedef NS_ENUM(NSInteger, CJSelectViewAction) {
 }
 
 - (BOOL)canPerformAction:(SEL)action withSender:(id)sender {
-    if ( (action == @selector(select:) && self.attributedText) // 需要有文字才能支持选择复制
-        || (action == @selector(selectAll:) && self.attributedText)
-        || (action == @selector(copy:) && self.attributedText))
+    if (
+        (action == @selector(copy:) && self.attributedText))
     {
         return YES;
     }
