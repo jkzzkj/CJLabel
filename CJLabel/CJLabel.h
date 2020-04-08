@@ -351,6 +351,11 @@
  */
 - (void)flushText;
 
+/**
+ 直接显示复制样式
+ */
+- (void)showCopyMode;
+
 @end
 
 

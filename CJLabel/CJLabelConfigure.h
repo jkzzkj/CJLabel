@@ -314,6 +314,12 @@ typedef struct CJCTLineVerticalLayout CJCTLineVerticalLayout;
 - (void)hideView;
 
 + (CJGlyphRunStrokeItem *)currentItem:(CGPoint)point allRunItemArray:(NSArray <CJGlyphRunStrokeItem *>*)allRunItemArray inset:(CGFloat)inset;
+
+/**
+ 显示所有复制
+ */
+- (void)selectAll:(nullable id)sender
+
 @end
 
 /// 混排插入任意view时的背景view

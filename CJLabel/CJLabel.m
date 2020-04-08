@@ -2199,4 +2199,10 @@ NSString * const kCJLinkStringIdentifierAttributesName       = @"kCJLinkStringId
     [CATransaction flush];
 }
 
+- (void)showCopyMode {
+    [self caculateCTRunCopySizeBlock:^(){
+        [[CJSelectCopyManagerView instance] selectAll:nil];
+    }];
+}
+
 @end
