@@ -1689,6 +1689,9 @@ NSString * const kCJLinkStringIdentifierAttributesName       = @"kCJLinkStringId
 
 #pragma mark - UIGestureRecognizerDelegate
 - (BOOL)gestureRecognizer:(UIGestureRecognizer *)gestureRecognizer shouldReceiveTouch:(UITouch *)touch {
+    if ([gestureRecognizer isKindOfClass:[UILongPressGestureRecognizer class]] && !_longPressEnable) {
+        return NO;
+    }
     if (gestureRecognizer == self.longPressGestureRecognizer) {
         objc_setAssociatedObject(self.longPressGestureRecognizer, &kAssociatedUITouchKey, touch, OBJC_ASSOCIATION_RETAIN_NONATOMIC);
     }
