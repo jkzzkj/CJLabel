@@ -814,7 +814,7 @@ typedef NS_ENUM(NSInteger, CJSelectViewAction) {
 
 - (BOOL)canPerformAction:(SEL)action withSender:(id)sender {
     if (
-        (action == @selector(copy:) && self.attributedText))
+        (action == @selector(copyString:) && self.attributedText))
     {
         return YES;
     }
@@ -848,7 +848,7 @@ typedef NS_ENUM(NSInteger, CJSelectViewAction) {
     self.magnifierView.hidden = YES;
     [self showMenuView];
 }
-- (void)copy:(nullable id)sender {
+- (void)copyString:(nullable id)sender {
     if (_startCopyRunItem && _endCopyRunItem) {
         
         NSUInteger loc = _startCopyRunItem.characterRange.location;
@@ -877,6 +877,8 @@ typedef NS_ENUM(NSInteger, CJSelectViewAction) {
                                  _startCopyRunItemY-5,
                                  _lineVerticalMaxWidth,
                                  _endCopyRunItem.withOutMergeBounds.origin.y + _endCopyRunItem.withOutMergeBounds.size.height + 16);
+        UIMenuItem *copyMenuItem = [[UIMenuItem alloc] initWithTitle:@"复制" action:@selector(copyString:)];
+        [[UIMenuController sharedMenuController] setMenuItems:@[copyMenuItem]];
         [[UIMenuController sharedMenuController] setTargetRect:rect inView:self];
         [[UIMenuController sharedMenuController] setMenuVisible:YES animated:YES];
     }
@@ -897,7 +899,7 @@ typedef NS_ENUM(NSInteger, CJSelectViewAction) {
     }
 }
 
-- (void)setScrollView:(UIView *)view scrollUnable:(BOOL)unable {    
+- (void)setScrollView:(UIView *)view scrollUnable:(BOOL)unable {
     if (view.superview) {
         if ([view.superview isKindOfClass:[UIScrollView class]]) {
             UIScrollView *scrollView = (UIScrollView *)view.superview;
@@ -1016,7 +1018,7 @@ typedef NS_ENUM(NSInteger, CJSelectViewAction) {
               needShowMagnifyView:(BOOL)needShowMagnifyView
 {
     //隐藏“选择、全选、复制”菜单
-    [[UIMenuController sharedMenuController] setMenuVisible:NO];
+//    [[UIMenuController sharedMenuController] setMenuVisible:NO];
     //选中部分填充背景色
     [self updateSelectTextRangeViewStartCopyRunItem:startCopyRunItem endCopyRunItem:endCopyRunItem allCTLineVerticalArray:allCTLineVerticalArray];
     

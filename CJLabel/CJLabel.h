@@ -359,7 +359,7 @@
 /**
  直接显示复制样式
  */
-- (void)showCopyMode;
+- (void)showCopyModeWithhideViewBlock:(void(^)(void))hideViewBlock;
 
 @end
 

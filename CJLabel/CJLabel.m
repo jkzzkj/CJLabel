@@ -264,7 +264,7 @@ NSString * const kCJLinkStringIdentifierAttributesName       = @"kCJLinkStringId
         }];
     }
     
-    if (!self.caculateSizeOnly && self.enableCopy) {
+    if (!self.caculateSizeOnly) {
         if (needEnumerateAllCharacter) {
             self.caculateCopySize = YES;
         }
@@ -739,7 +739,7 @@ NSString * const kCJLinkStringIdentifierAttributesName       = @"kCJLinkStringId
     NSMutableArray *lineRunItems = [self lineRunItemsFromCTLineRef:line lineIndex:lineIndex lineOrigin:lineOrigin inRect:rect context:c lineAscent:lineAscent lineDescent:lineDescent lineLeading:lineLeading lineWidth:lineWidth lineVerticalLayout:lineVerticalLayout];
     
     //需要计算复制数组，则添加
-    if (self.enableCopy && self.caculateCopySize) {
+    if (self.caculateCopySize) {
         [_allRunItemArray addObjectsFromArray:lineRunItems];
     }
     //当前行对 需要点击，填充背景色，添加删除线的CTRunItem合并后的数组
@@ -1800,22 +1800,20 @@ NSString * const kCJLinkStringIdentifierAttributesName       = @"kCJLinkStringId
                     [CATransaction flush];
                 }
             }else{
-                if (self.enableCopy) {
-                    _afterLongPressEnd = NO;
-                    [self caculateCTRunCopySizeBlock:^(){
-                        if (!self->_afterLongPressEnd) {
-                            //发生长按，显示放大镜
-                            CJGlyphRunStrokeItem *currentItem = [CJSelectCopyManagerView currentItem:point allRunItemArray:self->_allRunItemArray inset:0.5];
-                            if (currentItem) {
-                                [[CJSelectCopyManagerView instance] showMagnifyInCJLabel:self magnifyPoint:point runItem:currentItem];
-                            }else{
-                                if (CGRectContainsPoint(self.bounds, point)) {
-                                    [[CJSelectCopyManagerView instance] showMagnifyInCJLabel:self magnifyPoint:point runItem:nil];
-                                }
+                _afterLongPressEnd = NO;
+                [self caculateCTRunCopySizeBlock:^(){
+                    if (!self->_afterLongPressEnd) {
+                        //发生长按，显示放大镜
+                        CJGlyphRunStrokeItem *currentItem = [CJSelectCopyManagerView currentItem:point allRunItemArray:self->_allRunItemArray inset:0.5];
+                        if (currentItem) {
+                            [[CJSelectCopyManagerView instance] showMagnifyInCJLabel:self magnifyPoint:point runItem:currentItem];
+                        }else{
+                            if (CGRectContainsPoint(self.bounds, point)) {
+                                [[CJSelectCopyManagerView instance] showMagnifyInCJLabel:self magnifyPoint:point runItem:nil];
                             }
                         }
-                    }];
-                }
+                    }
+                }];
             }
             
             break;
@@ -1833,7 +1831,6 @@ NSString * const kCJLinkStringIdentifierAttributesName       = @"kCJLinkStringId
                     [CATransaction flush];
                 }
             }
-            if (self.enableCopy) {
                 CJGlyphRunStrokeItem *currentItem = [CJSelectCopyManagerView currentItem:point allRunItemArray:_allRunItemArray inset:1];
                 if (currentItem) {
                     
@@ -1856,13 +1853,12 @@ NSString * const kCJLinkStringIdentifierAttributesName       = @"kCJLinkStringId
                 }else{
                     [[CJSelectCopyManagerView instance] hideView];
                 }
-            }
             break;
         }
         case UIGestureRecognizerStateChanged:
         {
             //只移动放大镜
-            if (self.enableCopy && ![CJSelectCopyManagerView instance].magnifierView.hidden) {
+            if (![CJSelectCopyManagerView instance].magnifierView.hidden) {
                 //发生长按，显示放大镜
                 CJGlyphRunStrokeItem *currentItem = [CJSelectCopyManagerView currentItem:point allRunItemArray:_allRunItemArray inset:1];
                 if (currentItem) {
@@ -2218,8 +2214,16 @@ NSString * const kCJLinkStringIdentifierAttributesName       = @"kCJLinkStringId
     [CATransaction flush];
 }
 
-- (void)showCopyMode {
+- (void)showCopyModeWithhideViewBlock:(void(^)(void))hideViewBlock {
+    if (_allRunItemArray.count == 0) {
+        self.caculateCopySize = YES;
+        self.attributedText = self.attributedText;
+    }
     [self caculateCTRunCopySizeBlock:^(){
+        CJGlyphRunStrokeItem *currentItem = [CJSelectCopyManagerView currentItem:CGPointZero allRunItemArray:_allRunItemArray inset:1];
+        [[CJSelectCopyManagerView instance] showSelectViewInCJLabel:self atPoint:CGPointZero runItem:currentItem maxLineWidth:self->_lineVerticalMaxWidth allCTLineVerticalArray:self->_CTLineVerticalLayoutArray allRunItemArray:_allRunItemArray hideViewBlock:^{
+            hideViewBlock();
+        }];
         [[CJSelectCopyManagerView instance] selectAll:nil];
     }];
 }
